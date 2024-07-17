@@ -24,7 +24,7 @@ class _InitScreenState extends State<InitScreen> {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(
-        child: Text('Init Screen'),
+        child: Text('Tú ngu'),
       ),
     );
   }

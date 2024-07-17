@@ -1,9 +1,15 @@
+import 'package:chatapp/models/user.dart';
+import 'package:chatapp/screens/chat_list.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:chatapp/models/login_param.dart';
 import 'package:chatapp/models/login_res.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:chatapp/models/user_provider.dart';
+
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -17,21 +23,48 @@ class _LoginScreenState extends State<LoginScreen> {
 
 
   void _login() async {
+    // Tạo LoginParam và gửi yêu cầu đăng nhập tới backend
     LoginParam param = LoginParam(email: _email.text, password: _password.text);
     final response = await http.post(
-      Uri.parse("http://192.168.56.1:8080/api/auth/login"),
+      Uri.parse("http://localhost:8080/api/auth/login"),
       headers: {'Content-Type': 'application/json'},
       body: json.encode(param.toJson()),
     );
+
+    // Chuyển đổi response từ backend thành đối tượng LoginModel
     LoginModel data = LoginModel.fromJson(json.decode(response.body));
 
-    print(data.user?.id);
+    // In ra userId từ dữ liệu nhận được
+
+    // Kiểm tra nếu accessToken không null
     if (data.accessToken != null) {
-      Navigator.pushNamed(
-          context, '/products');
+      User user = User(
+        id: data.user?.id ?? null,
+        name: data.user?.name ?? '',
+        email: data.user?.email ?? '',
+        // thông tin provider cho user
+      );
+
+      Provider.of<UserProvider>(context, listen: false).setUser(user);
+
+      Navigator.pushNamed(context, '/chats');
+
+      // Lưu accessToken vào SharedPreferences
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('token', data.accessToken.toString());
-      print(prefs.getString('token'));
+      // print(prefs.getString('token'));
+
+      // Lưu thông tin người dùng vào Firestore
+      try {
+        await FirebaseFirestore.instance.collection('Users').doc(data.user?.id.toString()).set({
+          'accessToken': data.accessToken,
+          'userId': data.user?.id,
+          'name': data.user?.name,
+        }, SetOptions(merge: true));
+        
+      } catch (e) {
+        print("Error saving user informatioNn to Firestore: $e");
+      }
     } else {
       print("Invalid token");
     }
@@ -66,7 +99,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   // Navigator.push(
                   //     context,
                   //     MaterialPageRoute(
-                  //         builder: (context) => const Products()));
+                  //         builder: (context) => const ChatList()));
                 },
                 child: Container(
                   padding:

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:chatapp/models/register.dart';
+import 'package:chatapp/models/user.dart';
 class CreateAccount extends StatefulWidget {
   const CreateAccount({Key? key}) : super(key: key);
   @override
@@ -131,7 +132,7 @@ class _CreateAccountState extends State<CreateAccount> {
                 ElevatedButton(
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      Register register = Register(
+                      User user = User(
                         email: _emailController.text,
                         password: _passwordController.text,
                         phone: _phoneController.text,
@@ -139,6 +140,7 @@ class _CreateAccountState extends State<CreateAccount> {
                         dob: _dobController.text,
                         gender: _gender,
                       );
+                      Register register = Register(user: user);
 
                       // Chuyển đổi đối tượng Register thành JSON
                       String json = jsonEncode(register.toJson());
@@ -147,7 +149,7 @@ class _CreateAccountState extends State<CreateAccount> {
 
                       // Gửi dữ liệu lên server bằng phương thức POST
                       var response = await http.post(
-                        Uri.parse('http://192.168.56.1:8080/api/auth/register'),
+                        Uri.parse('http://192.168.1.91:8080/api/auth/register'),
                         headers: <String, String>{
                           'Content-Type': 'application/json; charset=UTF-8',
                         },

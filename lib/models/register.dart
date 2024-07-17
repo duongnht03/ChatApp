@@ -1,36 +1,26 @@
+import 'user.dart';
 class Register {
-  String? email;
-  String? password;
-  String? name;
-  String? phone;
-  String? dob;
-  String? gender;
+  User? user;
 
-  Register(
-      {this.email,
-        this.password,
-        this.name,
-        this.phone,
-        this.dob,
-        this.gender});
+  Register({this.user});
 
   Register.fromJson(Map<String, dynamic> json) {
-    email = json['email'];
-    password = json['password'];
-    name = json['name'];
-    phone = json['phone'];
-    dob = json['dob'];
-    gender = json['gender'];
+    user?.email = json['email'];
+    user?.password = json['password'];
+    user?.name = json['name'];
+    user?.phone = json['phone'];
+    user?.dob = json['dob'];
+    user?.gender = json['gender'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['email'] = this.email;
-    data['password'] = this.password;
-    data['name'] = this.name;
-    data['phone'] = this.phone;
-    data['dob'] = this.dob;
-    data['gender'] = this.gender;
+    data['email'] = this.user?.email;
+    data['password'] = this.user?.password;
+    data['name'] = this.user?.name;
+    data['phone'] = this.user?.phone;
+    data['dob'] = this.user?.dob;
+    data['gender'] = this.user?.gender;
 
     return data;
   }

@@ -1,13 +1,19 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 
 class ChatBubble extends StatelessWidget {
   const ChatBubble({
     Key? key,
     required this.text,
+    this.imageUrl,
     required this.isCurrentUser,
+    required this.color,
   }) : super(key: key);
+
   final String text;
+  final String? imageUrl;
   final bool isCurrentUser;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -25,15 +31,26 @@ class ChatBubble extends StatelessWidget {
         child: DecoratedBox(
           // chat bubble decoration
           decoration: BoxDecoration(
-            color: isCurrentUser ? Colors.blue : Colors.grey[300],
+            color: isCurrentUser ? color : Colors.grey[300],
             borderRadius: BorderRadius.circular(16),
           ),
           child: Padding(
             padding: const EdgeInsets.all(12),
-            child: Text(
+            child: imageUrl != null
+                ? ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.network(
+                imageUrl!,
+                width: 200,
+                height: 200,
+                fit: BoxFit.cover,
+              ),
+            )
+                : Text(
               text,
               style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                  color: isCurrentUser ? Colors.white : Colors.black87),
+                color: isCurrentUser ? Colors.white : Colors.black87,
+              ),
             ),
           ),
         ),

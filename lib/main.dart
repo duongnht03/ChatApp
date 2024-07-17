@@ -1,15 +1,22 @@
-import 'package:chatapp/route.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:chatapp/screens/splash.dart';
-import 'package:chatapp/screens/login_page.dart';
+import 'package:chatapp/route.dart';
 import 'dart:io';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'package:provider/provider.dart';
+import 'package:chatapp/models/user_provider.dart';
+bool shouldUseFirestoreEmulator = true;
 
 void main() async{
-  // WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp();
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   HttpOverrides.global = CustomHttpOverrides();
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (_) => UserProvider()),
+    ],
+    child: MyApp(),
+  ),);
 }
 
 class MyApp extends StatefulWidget {
@@ -32,7 +39,6 @@ class _MyAppState extends State<MyApp> {
 class CustomHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
-    // accept when SSL certificate error
     return super.createHttpClient(context)
       ..badCertificateCallback =
           (X509Certificate cert, String host, int port) => true;

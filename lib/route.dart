@@ -1,9 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'package:chatapp/screens/create_account.dart';
 import 'package:chatapp/screens/splash.dart';
 import 'package:chatapp/screens/login_page.dart';
 import 'package:chatapp/screens/chat_list.dart';
+import 'package:chatapp/screens/boxchat.dart';
 
 class AppRouter {
 
@@ -32,7 +32,7 @@ class AppRouter {
         return LoginScreen();
       case registerScreen:
         return CreateAccount();
-      case productsScreen:
+      case chatsScreen:
         return ChatList();
       default:
         throw 'Route $routeName is not defined';
@@ -44,5 +44,6 @@ class AppRouter {
   static const String splash = '/';
   static const String loginScreen = '/loginScreen';
   static const String registerScreen = '/registerScreen';
-  static const String productsScreen = '/products';
+  static const String chatsScreen = '/chats';
+  // static const String boxchat = '/boxchat';
 }
