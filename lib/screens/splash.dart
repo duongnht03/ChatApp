@@ -22,9 +22,9 @@ class _InitScreenState extends State<InitScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
-        child: Text('Tú ngu'),
+        child: Image.asset('assets/image/Logo -uihut.png'),
       ),
     );
   }

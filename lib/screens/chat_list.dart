@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/user.dart';
 import '../models/user_provider.dart';
+import '../provider/theme_mode.dart';
 
 class ChatList extends StatefulWidget {
   const ChatList({Key? key}) : super(key: key);
@@ -91,6 +92,7 @@ class _ChatListScreenState extends State<ChatList> {
   @override
   Widget build(BuildContext context) {
     User? user = Provider.of<UserProvider>(context, listen: false).user;
+    final themeProvider = Provider.of<ThemeProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Chat List'),
@@ -117,8 +119,23 @@ class _ChatListScreenState extends State<ChatList> {
               leading: Icon(Icons.settings),
               title: Text('Settings'),
               onTap: () {
-                // Handle settings navigation
-                Navigator.pop(context);
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    bool isDarkMode = themeProvider.themeMode == ThemeMode.dark;
+                    return AlertDialog(
+                      title: Text('Chọn chế độ màu'),
+                      content: SwitchListTile(
+                        title: Text('Chế độ tối'),
+                        value: isDarkMode,
+                        onChanged: (value) {
+                          themeProvider.toggleTheme(value);
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    );
+                  },
+                );
               },
             ),
             ListTile(

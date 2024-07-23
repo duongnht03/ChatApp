@@ -26,7 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
     // Tạo LoginParam và gửi yêu cầu đăng nhập tới backend
     LoginParam param = LoginParam(email: _email.text, password: _password.text);
     final response = await http.post(
-      Uri.parse("http://localhost:8080/api/auth/login"),
+      Uri.parse("http://192.168.1.91:8080/api/auth/login"),
       headers: {'Content-Type': 'application/json'},
       body: json.encode(param.toJson()),
     );
@@ -73,60 +73,71 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: Icon(Icons.arrow_circle_left_outlined),
+      ),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            children: [
-              SizedBox(height: 300),
-              TextField(
-                controller: _email,
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'Enter an username'),
-              ),
-              SizedBox(height: 24),
-              TextField(
-                controller: _password,
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'Enter an password'),
-              ),
-              SizedBox(height: 24),
-              InkWell(
-                onTap: () {
-                  _login();
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: (context) => const ChatList()));
-                },
-                child: Container(
-                  padding:
-                  const EdgeInsets.symmetric(horizontal: 100, vertical: 20),
-                  decoration: BoxDecoration(
-                      color: Colors.yellow,
-                      border: Border.all(width: 8),
-                      borderRadius: BorderRadius.circular(20)),
-                  child: Text(
-                    "Sign In",
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(height: 40),
+                Text(
+                    'Login to ChatBox'
+                ),
+                SizedBox(height: 20),
+                Text('Welcome back! Sign in using your email'),
+                Text('to continue us'),
+                SizedBox(height: 30),
+                TextField(
+                  controller: _email,
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Enter an username'),
+                ),
+                SizedBox(height: 24),
+                TextField(
+                  controller: _password,
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Enter an password'),
+                ),
+                SizedBox(height: 200),
+                InkWell(
+                  onTap: () {
+                    _login();
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => const ChatList()));
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 20),
+                    decoration: BoxDecoration(
+                        color: Colors.yellow,
+                        border: Border.all(width: 8),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Text(
+                      "Sign In",
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(height: 8),
-              InkWell(
-                onTap: () {
-                  Navigator.pushNamed(
-                      context,
-                      '/registerScreen');
-                },
-                child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 4, horizontal: 20),
-                  decoration: BoxDecoration(),
-                  child: Text("Create an account"),
-                ),
-              )
-            ],
+                SizedBox(height: 8),
+                InkWell(
+                  onTap: () {
+                    Navigator.pushNamed(
+                        context,
+                        '/registerScreen');
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 4, horizontal: 20),
+                    decoration: BoxDecoration(),
+                    child: Text("Create an account"),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
